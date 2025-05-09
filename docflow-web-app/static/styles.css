@@ -1,0 +1,323 @@
+/* General Styling , landing page*/
+/* General Page Styling */
+:root {
+    --white: #FFFFFF;
+    --light-purple: #EEE7F2;
+    --lime-green: #B5EA54;
+    --deep-purple: #8071A2;
+}
+
+* {
+    box-sizing: border-box;  /* Ensures padding & margin don't overflow */
+    max-width: 100%;  /* Prevents content from stretching */
+}
+
+body {
+    /* font-family: Arial, sans-serif; */
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #8071A2;
+    display: flex;
+    width: 100%;
+    height: 100vh; 
+    flex-direction: column;
+    
+}    
+
+
+
+/* Navbar Styling */
+.navbar {
+    /* WG+E Purple */
+   background-color: #5A2A7D;
+   padding: 10px 10px; /* Increased padding for better spacing */
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   width: 100%;
+   height:80px;
+   overflow: hidden;
+   border-bottom: #5B2F83 2px solid;
+   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+   position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+   
+}
+
+/* Logo Styling */
+.logo {
+   height: 130px; /* Increased size for better visibility */
+   
+}
+
+.nav-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: bold; 
+    font-family: 'Inter', sans-serif;
+    /* color: #C5F76D; */
+    color: #ffffff; 
+    
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    
+
+}
+/* Navigation Links */
+.nav-right {
+   display: flex;
+   gap: 0px; /* Spaced out navigation links */
+   align-items: center;
+   justify-content: flex-end;
+   
+   /* padding: 0; */
+
+}
+
+/* Home Icon Styling */
+.nav-right a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px; /* Padding for circular shape */  
+    text-decoration: none;
+    /* font-size: 45px; */
+    
+}
+
+/* Home Icon Color */
+.nav-right a i {
+    color: #C1F53C; /* Lime Green */
+    font-size: 47px;
+    transition: color 0.3s ease-in-out;
+}
+
+.nav-right a:nth-child(2) i {
+    margin-right: 4px;
+    font-size: 41px;
+    margin-bottom: -6px;
+}
+.nav-right a:nth-child(3) i {
+    margin-right: 0px;
+    font-size: 40px;
+}
+.nav-right a:hover i {
+    color: #A1D633     ; /* White icon color on hover */
+    text-shadow: 0 0 4px #5A2A7D33;
+
+}/* Styling for Add Initiative button --- Index page */
+
+.add-initiative {
+    width: 50px;
+    height: 10px;
+    /* background-color: #B5EA54;  */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Plus icon inside the button */
+.add-initiative i {
+    font-size: 24px;
+    color: #333;
+}
+
+/* Hover effect for Add Initiative button */
+.add-initiative:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+}
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 50px auto 30px auto; /* Center horizontally */
+    padding: 20px;
+    text-align: center;
+    
+}
+/* Button Styling */
+
+/* Center the Button Container */
+.button-container {
+    /* background: #ffffff; */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 10px 20px 35px rgba(0, 0, 0.3, 0.4); /* Slight shadow */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 400px;
+    border: 3px solid #5A2A7D;
+    height: 350px;
+    /* This will center it horizontally */
+    margin: 0 auto; 
+    
+    /* Ensures vertical centering in the viewport */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+
+    
+}
+
+.button {
+    background-color: #C5F76D;
+    color: #401361;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 18px;
+    border: none;
+    /* width: 100%; */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    white-space: nowrap; /* Prevents text wrapping */
+  }
+
+.button1 { width: 250px; }
+.button2 { width: 250px; }
+.button3 { width: 250px; }  
+.button4 { width: 250px; }
+
+.button:hover {
+    background-color: #A2D64F;
+    transform: scale(1.05); /* Slight pop effect */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2); /* Slight shadow increase */
+    color: #4e365f;
+}
+
+  
+
+/*_-----------------------*/
+/* Styling the filters page */
+
+
+
+.filter-dropdown, .filter-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    background-color: #ffffff;
+    text-align: left;
+    border-color: #5A2A7D;
+}
+
+.filter-input::placeholder {
+    color: #888;
+}
+
+.filter-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    
+}
+
+
+.filter-form label {
+    font-size: 1.2rem;
+    color: #5A2A7D;
+    margin-bottom: 5px;
+} 
+
+
+  /* Dropdown checkbox list */
+  .checkbox-dropdown {
+    display: none;
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    background-color: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 2px;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    font-size: 1.0rem;
+  }
+  
+  /* Checkbox item styling */
+  .checkbox-dropdown label {
+    display: flex;
+     padding: 6px 12px;
+    color: #5A2A7D;
+    font-size: 1rem;
+    white-space: nowrap;
+    gap: -5px; /* space between checkbox and text */
+    align-items: center;
+    font-weight: 500;
+    gap: 6px;
+  }
+  
+  .checkbox-dropdown label:hover {
+    background-color: #5A2A7D;
+    color: white;
+    
+  }
+  
+  .checkbox-dropdown input[type="checkbox"] {
+    flex-shrink: 0;
+    transform: scale(1.1);
+    margin: 0;
+    padding: 0;
+    width: auto;
+    
+  }
+  /* Matches <select> styling */
+.styled-select {
+      
+    /* ✅ Add a dropdown arrow (like <select>) */
+    background-image: url('/static/Logos/arrow.png ');
+    background-repeat: no-repeat;
+    background-position: right -5px center;
+    background-size: 20px;
+    
+  }
+  
+/* -------------------------------- */
+
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #5A2A7D;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 0.9rem;
+    padding: 0px;
+    margin-top: 16px;
+}
+
+
+
+

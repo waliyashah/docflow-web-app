@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <!-- Button Container -->
+    <div class="button-container">
+        <div >
+            <a href="/search?category=all&division=all&status=all&year=all" class="button button1">
+                <i class="fas fa-list"></i>
+                <span>Show All Initiatives</span>
+            </a>
+        </div>
+        <div>   
+            <div>
+                <!-- <a href="/filter" class="button">Filter Initiatives</a> -->
+                <a href="/filter" class="button button2">
+                    <i class="fas fa-filter"></i>
+                    <span>Filter Initiatives</span>
+                </a>
+            </div>
+            
+        </div>
+        <div>
+            <!-- <a href="/add_initiative" class = "button">Add Initiative</a> -->
+            <a href="/add_initiative" class="button button3">
+                <i class="fas fa-plus"></i>
+                <span>Add Initiative</span>
+            </a>
+        </div>
+        <a href="{{ url_for('view_all_reports') }}" class="button button4">
+            <i class="fas fa-file-alt"></i>
+            <span>View All Reports</span>
+        </a>
+        
+  </div>
+  <!-- Filter Section (Initially Hidden) -->
+  
+
+<!-- External JavaScript -->
+<script src="{{ url_for('static', filename='scripts.js') }}"></script>
+
+{% if session.get('role') == 'Manager' and manager_reviewed_initiatives %}
+  <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-900 p-4 mb-4 rounded">
+    <p class="font-semibold mb-2">🔔 Your initiatives have been reviewed:</p>
+    <ul class="list-disc ml-5 text-sm">
+      {% for item in manager_reviewed_initiatives %}
+      <li>
+        "{{ item.Title }}" was
+        <span class="{% if item.Status == 'Approved' %}text-green-600{% else %}text-red-600{% endif %}">
+          {{ item.Status }}
+        </span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+       
+
+{% endblock %}

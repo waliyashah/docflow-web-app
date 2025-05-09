@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> WG+E KRA </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+
+<body>
+      
+  <div class="login-container">
+
+        <div class="company-header"> 
+            <div class="company-logo">
+                                                
+            <img src="{{ url_for('static', filename='Logos/WGE-WCF-logo-B-oval.png') }}" alt="WG+E Logo" class="logo">
+
+            </div>    
+        </div>
+
+          <!-- ✅ Flash Message Block -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% set category, message = messages[-1] %}
+                <div class="flash-message 
+                    {% if category == 'success' %}flash-success
+                    {% elif category == 'danger' or category == 'error' %}flash-error
+                    {% else %}flash-info{% endif %}">
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endwith %}
+            
+      <form method="POST" action="{{ url_for('auth.login') }}">
+          <div class="input-group">
+              
+              <input type="text" name="user_input" id="user_input" placeholder="Email or Username" required>
+
+          </div>
+          
+          <div class="input-group">
+              
+              <input type="password" name="password" id="password" placeholder="Password" required>
+
+          </div>
+          
+          <button type="submit" class="login-btn">LOG IN</button>
+          
+      </form>
+  </div>
+
+</body>
+</html>
+
+
+

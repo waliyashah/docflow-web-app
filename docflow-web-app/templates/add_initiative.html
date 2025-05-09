@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="py-10 max-w-3xl mx-auto">
+    <h2 class="text-2xl font-semibold mb-6 text-[#594276]" style = "margin-top: -1.5rem;  margin-bottom: 0.5rem;">Add New Initiative</h2>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% set category, message = messages[-1] %}  {# Only get the last message #}
+            <div id="popup-message" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div class="bg-white p-6 rounded shadow-lg max-w-sm w-full text-center">
+                <!-- {% for category, message in messages %} -->
+                    <div class="mb-4 text-sm font-medium 
+                                {% if category == 'success' %}text-green-700
+                                {% elif category == 'danger' %}text-red-700
+                                {% endif %}">
+                    {{ message }}
+                    </div>
+                <!-- {% endfor %} -->
+                <button type="button"
+                onclick="document.getElementById('popup-message').remove()"
+                class="mt-2 px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800">
+                    OK
+                </button>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="bg-white p-6 rounded-lg shadow-md space-y-1  ">
+        <div>
+            <label for="in_id" class="block text-purple-900 text-sm font-medium">Initiative ID</label>
+            <input type="text" name="in_id" id="in_id" required class="w-full border text-purple-900 px-3 py-2 rounded-md ">
+        </div>
+
+        <div>
+            <label for="title" class="block text-purple-900 text-sm font-medium">Title</label>
+            <input type="text" name="title" id="title" required class="w-full text-purple-900 border px-3 py-2 rounded-md">
+        </div>
+
+        <div>
+            <label for="category" class="block text-purple-900 text-sm font-medium">Category</label>
+            <select name="category" id="category" required class="w-full text-purple-900 border px-3 py-2 rounded-md">
+                <option value="" disabled selected hidden  >Select</option>
+                {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div>
+            <label for="description" class="block text-purple-900 text-sm font-medium">Description</label>
+            <textarea name="description" id="description" required rows="2" class="w-full text-purple-900 border border-transparent bg-white px-3 py-2 rounded-md focus:outline-none focus:ring-0 focus:border-transparent focus:shadow-md"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="status" class=" block text-purple-900 text-sm font-medium">Status</label>
+                {% if session.get('role') == 'Approver' %}
+                  <select name="status" id="status" class="w-full text-purple-900 border px-3 py-2 rounded-md">
+                    <option value="" disabled selected hidden  >Select</option>
+                    <!-- <option value="Approved">Approved</option> -->
+                    <option value="Updated">Updated</option>
+                    <!-- <option value="Rejected">Rejected</option> -->
+                  </select>
+                {% else %}
+                  <input type="text" value="Pending Approval" class="w-full border px-3 py-2 rounded-md bg-gray-100" readonly>
+                {% endif %}
+              </div>
+
+            <div>
+                <label for="year" class=" block text-purple-900 text-sm font-medium">Year</label>
+                <select name="year" id="year" class="w-full text-purple-900 border px-3 py-2 rounded-md">
+                    <option value="" disabled selected hidden  >Select</option>
+                    {% for y in range(2024, 2031) %} <!-- Adjust the range as needed -->
+                        <option value="{{ y }}">{{ y }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div>
+            <label for="division_name" class="block text-purple-900 text-sm font-medium">Division</label>
+            <select name="division_name"  id="division_name" required class="w-full text-purple-900 border px-3 py-2 rounded-md ">
+                <option value="" disabled selected hidden  >Select</option>
+                {% for division in divisions %}
+                    <option value="{{ division }}">{{ division }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        
+
+        <!-- <div>
+            <h3 class="block text-purple-900 text-sm font-medium mt-2 mb-2">Employees</h3>
+            <div id="employee-fields" class="space-y-3">
+                <div class="grid grid-cols-[1fr_1fr_1fr_auto] gap-3 items-center employee-group">
+                    <input type="text" name="emp_id" placeholder="Employee ID" class="border text-purple-900 px-3 py-2 rounded-md">
+                    <input type="text" name="emp_name" placeholder="Employee Name" class="border  text-purple-900 px-3 py-2 rounded-md">
+                    <input type="text" name="emp_role" placeholder="Employee Role" class="border text-purple-900 px-3 py-2 rounded-md">
+                    <button type="button" onclick="addEmployeeRow()" title="Add Employee"
+                            class="bg-[#C5F76D] text-purple-900 hover:bg-[#a4c956] w-10 h-10 flex items-center justify-center rounded-md">
+                        <i class="fas fa-user-plus text-base"></i>
+                    </button>
+                  </div>
+                  
+            </div>
+            
+        </div> -->
+
+        <!-- Employee Section -->
+        <div>
+            <h3 class="text-sm font-medium text-purple-900 mt-2 mb-2">Employees</h3>
+            <div id="employee-fields" class="space-y-3">
+                <div class="grid grid-cols-[1fr_1fr_1fr_auto] gap-3 items-center employee-group">
+                    <input list="emp_ids" name="emp_id" placeholder="Employee ID"
+                           class="border px-3 py-2 rounded-md text-purple-900" oninput="fillEmpName(this)">
+                    <datalist id="emp_ids">
+                        {% for emp in employee_records %}
+                            <option value="{{ emp[0] }}"></option>
+                        {% endfor %}
+                    </datalist>
+
+                    <input list="emp_names" name="emp_name" placeholder="Employee Name"
+                           class="border px-3 py-2 rounded-md text-purple-900" oninput="fillEmpID(this)">
+                    <datalist id="emp_names">
+                        {% for emp in employee_records %}
+                            <option value="{{ emp[1] }}"></option>
+                        {% endfor %}
+                    </datalist>
+
+                    <input list="emp_roles" name="emp_role" placeholder="Employee Role"
+                           class="border px-3 py-2 rounded-md text-purple-900">
+                    <datalist id="emp_roles">
+                        {% for role in roles %}
+                            <option value="{{ role }}">
+                        {% endfor %}
+                    </datalist>
+
+                    <button type="button" onclick="addEmployeeRow()" title="Add Employee"
+                            class="bg-[#C5F76D] text-purple-900 hover:bg-[#a4c956] w-10 h-10 flex items-center justify-center rounded-md">
+                        <i class="fas fa-user-plus text-base"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="w-full mt-3 px-4 py-2 bg-[#594276] text-white rounded hover:bg-[#C5F76D]" title = "Add Initiative">Add Initiative</button>
+    </form>
+</div>
+
+<!-- <script>
+    function addEmployeeRow() {
+        const container = document.getElementById('employee-fields');
+        const row = document.createElement('div');
+        row.className = 'grid grid-cols-[1fr_1fr_1fr_auto] gap-3 items-center employee-group mt-2';
+        row.innerHTML = `
+            <input type="text" name="emp_id" placeholder="Employee ID" class="border px-3 py-2 rounded-md">
+            <input type="text" name="emp_name" placeholder="Employee Name" class="border px-3 py-2 rounded-md">
+            <input type="text" name="emp_role" placeholder="Employee Role" class="border px-3 py-2 rounded-md">
+            <button type="button" class="remove-emp bg-red-500 text-white w-9 h-9 flex items-center justify-center rounded-md hover:bg-red-600" title="Remove">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        container.appendChild(row);
+
+        // Add event listener for the remove button
+        row.querySelector('.remove-emp').addEventListener('click', () => {
+            container.removeChild(row);
+        });
+    }
+</script> -->
+
+<script>
+    window.employee_records = JSON.parse('{{ employee_records|tojson|safe }}');
+</script>
+  
+{% endblock %}

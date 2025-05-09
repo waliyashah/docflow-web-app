@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-4">
+    <h2 class="text-center mb-3" style="color: black; font-weight: bold;">Reports for {{ 'All Initiatives' if in_id == 'All' else 'Initiative ' ~ in_id }}</h2>
+    <a href="{{ url_for('search.search', category='all', division='all', status='all', year='all') }}" class="btn btn-secondary mb-3" 
+    style="background-color: #5A2A7D; color: #ffffff; border: none; font-weight: 400;">Back</a>
+
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                {% if in_id == 'All' %}
+                    <th>Initiative ID</th>
+                {% endif %}
+                <th>Title</th>
+                <th>Category</th>
+                <th>Regulatory Report</th>
+                <th>Due Date</th>
+                <th>Type</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in reports %}
+            <tr>
+                <tr>
+                {% if in_id == 'All' %}
+                      <td>{{ r.IN_ID or 'N/A' }}</td>
+                {% endif %}
+                <td>{{ r.Title }}</td>
+                <td>{{ r.Category }}</td>
+                <td>{{ r.Regulatory_Report }}</td>
+                <td>{{ r.Due_Date or 'N/A' }}</td>
+                <td>{{ r.Type }}</td>
+                <td>
+                    {% if r.Report_Link %}
+                        <a href="{{ r.Report_Link }}" target="_blank">Open</a>
+                    {% else %}
+                        No Link
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="text-center text-muted">No reports available for this initiative.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

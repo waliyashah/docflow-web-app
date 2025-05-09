@@ -1,0 +1,233 @@
+/* Table Styling */
+#initiativesTable {
+    border-collapse: collapse;
+    margin: -48px 10px 0 10px; /* Top margin and left/right shifts */
+    background: white;
+    border: 1px solid white;
+    border-radius: 5px;
+  }
+  /* Table Header */
+  #initiativesTable thead {
+    
+    color: #5A2A7D;
+    font-weight: bold;
+    border-bottom: 3px solid #5A2A7D;
+    text-align: center;
+   
+  }
+  /* Table Cells - Reduce Row Height */
+  #initiativesTable th, #initiativesTable td {
+    padding: 3px 8px; /* Decrease row height */
+    /* Borders around each cell */
+    border: 2px solid #EEE7F2; 
+    text-align: left;
+    vertical-align: middle; /* Keep text centered vertically */
+    font-size: 14px; /* Reduce font size slightly */
+  }
+  /* Reduce spacing between table rows */
+  #initiativesTable tbody tr {
+    height: 70px; /* Set smaller row height */
+  
+  }
+   /* Column Widths - Keep Consistent */
+   /* Increase  specific Column Width */
+   #initiativesTable td:nth-child(8), #initiativesTable th:nth-child(8) {
+    width: 800px; /* Expanding Description column */
+  }
+  #initiativesTable td:nth-child(7), #initiativesTable th:nth-child(7) {
+    width: 250px; 
+  }
+   /* Increase  Column Width */
+   #initiativesTable td:nth-child(1), #initiativesTable th:nth-child(1) {
+    width: 120px; 
+  }
+  /* Increase  Column Width */
+  #initiativesTable td:nth-child(2), #initiativesTable th:nth-child(2) {
+    width: 120px; 
+  }
+  /* Increase  Column Width */
+  #initiativesTable td:nth-child(9), #initiativesTable th:nth-child(9) {
+    width: 60px; 
+  }
+   /* Increase  Column Width */
+   #initiativesTable td:nth-child(5), #initiativesTable th:nth-child(5) {
+    width: 120px; 
+  }
+  /* Increase  Column Width */
+  #initiativesTable td:nth-child(10), #initiativesTable th:nth-child(10) {
+    width: 130px; 
+  }
+  #initiativesTable td:nth-child(11), #initiativesTable th:nth-child(11) {
+    width: 165px; 
+  }
+  #initiativesTable td:nth-child(12), #initiativesTable th:nth-child(12) {
+    width: 150px; 
+  }
+  /* Adjust DataTable container for better visibility */
+  .dataTables_wrapper {
+    margin-top: -94px;
+    margin-bottom: auto;
+  }
+    /*Subtle hover effect */
+
+  #initiativesTable tbody tr:hover {
+    background-color:#e8f5e9   !important; /* was--Lighter lime green #F4FDE3  */
+    transition: background-color 0.2s ease-in-out; 
+  }
+    
+/* Reduce width and spacing of search box and entries dropdown */
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input {
+    
+    padding: 4px 6px;
+    /* border: 1px solid #a787d6 !important; */
+    border-radius: 10px;
+    color: #030303; /* Purple text */
+    border-width: 1px !important;
+    border-color: #000000 !important; /* Light Purple */
+    
+}
+
+/* Adjust label text color and spacing */
+.dataTables_wrapper .dataTables_length label,
+.dataTables_wrapper .dataTables_filter label {
+    color: #000000; /* Label text color */
+    font-size: 14px;
+    margin-right: 8px;
+    margin-left: 15px;
+    
+   
+}
+
+/* Reduce space between dropdown/input and label */
+.dataTables_wrapper .dataTables_length label,
+.dataTables_wrapper .dataTables_filter label {
+    display: flex;
+    align-items: center;
+    gap: 4px; /* smaller gap */
+    
+}
+
+.dataTables_wrapper .dataTables_length select {
+  width: 60px;   
+  font-size: 15px;
+  font-weight: bold;
+ 
+}  
+
+.dataTables_wrapper .dataTables_filter input {
+  width: 180px;
+  font-size: 12px;
+  color: #000000;
+  
+}
+
+.dataTables_wrapper .dataTables_info {
+  color: #000000 !important; /* Purple text */
+  font-size: 15px;
+  margin-left: 14px;
+ margin-bottom: -36px;
+ font-weight: bold;
+}
+
+/* Center Pagination */
+.dataTables_wrapper .dataTables_paginate {
+  text-align: center !important; /* Force centering */
+  display: flex;
+  justify-content: center;
+  margin-top: 1px;
+  width: 100%;
+  color: #000000!important; /* Purple text */
+}
+
+
+/* Style Pagination Buttons */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  padding: 6px 10px;
+  margin: 2px;
+  border: none;
+  transition: all 0.2s ease-in-out;
+  font-size: 16px;
+  font-weight: bold;
+  
+}
+
+/* Change "Read More" color */
+.read-more-btn {
+  color: #662d91 !important; /* Deep Purple */
+  text-decoration: none; /* Remove underline */
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Add hover effect */
+.read-more-btn:hover {
+    color: #452c63!important; /* Lime Green */
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* action button styling */
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 5px;
+  
+}
+
+.approve-btn, .reject-btn {
+  width: 100px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+}
+
+.approve-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.approve-btn:hover {
+  background-color: #218838;
+}
+
+.reject-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.reject-btn:hover {
+  background-color: #c82333;
+}
+
+#top {
+  scroll-margin-top: 200px; /* Adjust to match your navbar height if it's fixed */
+}
+    
+  /* Floating Back to Top Button */
+.back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #c1f53c;
+  color: rgb(90 42 125);
+  padding: 6px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 25px;
+  font-weight: bold;
+  z-index: 1000;
+  margin-bottom: 3px;
+ 
+}
+
+.back-to-top:hover {
+  color: rgb(90, 42, 125);       /* Keep your theme color */
+  text-decoration: none;         /* Remove underline */
+  background-color: #b8ec63;     /* Optional: lighter hover background */
+}

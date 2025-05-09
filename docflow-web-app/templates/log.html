@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h3>Action History for Initiative: {{ in_id }}</h3>
+
+  {% if logs %}
+    <table class="table table-bordered mt-3">
+      <thead>
+        <tr>
+          <th>Action</th>
+          <th>Performed By</th>
+          <th>Role</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+          <tr>
+            <td>{{ log.Action_Type }}</td>
+            <td>{{ log.Performed_By or 'N/A' }}</td>
+            <td>{{ log.Performed_Role or 'N/A' }}</td>
+            <td>{{ log.Timestamp }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="text-muted">No action history available for this initiative.</p>
+  {% endif %}
+</div>
+{% endblock %}

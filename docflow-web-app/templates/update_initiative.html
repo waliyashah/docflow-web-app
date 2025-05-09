@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="py-10 max-w-3xl mx-auto">
+
+    <!-- Back Button -->
+    <a href="{{ url_for('search.search', category='all', division='all', status='all', year='all') }}" 
+        class="inline-flex items-center px-4 py-2 mb-4  font-medium text-purple-900 border border-purple-300 rounded hover:bg-purple-100 transition">
+        ← Back
+    </a>
+
+    <h2 class="text-2xl font-semibold mb-6 text-[#594276]">Edit Initiative</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% set category, message = messages[-1] %}  {# Only get the last message #}
+            <div id="popup-message" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div class="bg-white p-6 rounded shadow-lg max-w-sm w-full text-center">
+                    <div class="mb-4 text-sm font-medium 
+                                {% if category == 'success' %}text-green-700
+                                {% elif category == 'danger' or category == 'error' %}text-red-700
+                                {% else %}text-gray-700{% endif %}">
+                        {{ message }}
+                    </div>
+                    <button onclick="document.getElementById('popup-message').remove()"
+                            class="mt-2 px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800">
+                        OK
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/update_initiative/{{ initiative.ID }}" class="bg-white p-6 rounded-lg shadow-md space-y-5">
+        <label>Initiative ID:</label>
+        <input type="text" name="in_id" value="{{ initiative.IN_ID }}"  required class="w-full border px-3 py-2 rounded-md bg-gray-100" readonly>
+
+        <label>Title:</label>
+        <input type="text" name="title" value="{{ initiative.Title }}" required class="w-full border px-3 py-2 rounded-md">
+
+        <label>Category:</label>
+        <select name="category" required class="w-full border px-3 py-2 rounded-md">
+            {% for cat in categories %}
+                <option value="{{ cat }}" {% if initiative.Category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Description:</label>
+        <textarea name="description" rows="3" class="w-full border px-3 py-2 rounded-md">{{ initiative.Description }}</textarea>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label>Status:</label>
+                {% if session.get('role') == 'Approver' %}
+                  <select name="status" class="w-full border px-3 py-2 rounded-md">
+                    {% for s in statuses %}
+                      <option value="{{ s }}" {% if initiative.Status == s %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                  </select>
+                {% else %}
+                  <input type="text" value="Pending Approval" class="w-full border px-3 py-2 rounded-md bg-gray-100" readonly>
+                {% endif %}
+              </div>
+            <div>
+                <label>Year:</label>
+                <select name="year" class="w-full border px-3 py-2 rounded-md">
+                    {% for y in range(2024, 2031) %}
+                        <option value="{{ y }}" {% if initiative.Year == y %}selected{% endif %}>{{ y }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <label>Division:</label>
+        <select name="division_name" required class="w-full border px-3 py-2 rounded-md">
+            {% for division in divisions %}
+                <option value="{{ division }}" {% if initiative.Division_Name == division %}selected{% endif %}>{{ division }}</option>
+            {% endfor %}
+        </select>
+
+        <h3 class="text-lg font-semibold mt-6 mb-2">Employees</h3>
+
+        {% for emp in employees %}
+        <div class="p-3 border rounded mb-4 bg-gray-50 employee-group">
+        <h4 class="font-semibold mb-2 text-sm text-gray-700">Employee {{ loop.index }}</h4>
+        <div class="grid grid-cols-[1fr_1fr_1fr_auto] gap-3 items-center employee-group mt-2">
+            <input list="emp_ids" name="emp_id" value="{{ emp.Emp_ID }}"
+                   class="border px-3 py-2 rounded-md text-purple-900"
+                   oninput="fillEmpName(this)">
+            <input list="emp_names" name="emp_name" value="{{ emp.Name }}"
+                   class="border px-3 py-2 rounded-md text-purple-900"
+                   oninput="fillEmpID(this)">
+            <input list="emp_roles" name="emp_role" value="{{ emp.Role }}"
+                   class="border px-3 py-2 rounded-md text-purple-900">
+            <button type="button"
+                    class="remove-emp bg-red-500 text-white w-9 h-9 flex items-center justify-center rounded-md hover:bg-red-600"
+                    title="Remove Employee"
+                    onclick="removeEmployeeRow(this)">
+                <i class="fas fa-times text-base"></i>
+            </button>
+            <input type="hidden" name="remove_emp" value="0" />
+          </div>
+          
+        </div>  
+        {% endfor %}
+
+            <!-- New Rows Added Dynamically -->
+        <div id="new-employee-fields" class="space-y-4 mt-4"></div>
+
+        <!-- Datalists for Employee Dropdowns -->
+        <datalist id="emp_ids">
+            {% for emp in employee_records %}
+                <option value="{{ emp[0] }}"></option>
+            {% endfor %}
+        </datalist>
+
+        <datalist id="emp_names">
+            {% for emp in employee_records %}
+                <option value="{{ emp[1] }}"></option>
+            {% endfor %}
+        </datalist>
+
+        <datalist id="emp_roles">
+            {% for role in roles %}
+                <option value="{{ role }}">
+            {% endfor %}
+        </datalist>
+
+        <button type="button" onclick="addEmployeeRow()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mb-4">
+            Add Another Employee
+        </button>
+
+        
+        <button type="submit" class="w-full mt-6 px-4 py-2 bg-[#594276] text-white rounded hover:bg-[#4a3562]">
+            Update Initiative
+        </button>
+    </form>
+</div>
+
+
+<script>
+    window.employee_records = JSON.parse('{{ employee_records|tojson|safe }}');
+</script>
+{% endblock %}

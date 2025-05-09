@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 style="font-size: 1.5rem; color: #5A2A7D; font-weight: bold; margin-top: -48px; ">Filter Initiatives</h2>
+</div>
+
+<div class="filter-container" style = "padding: 20px; border-radius: 5px;">    
+    <form action="/search" method="GET" class="filter-form">
+        <!-- Search Field -->
+        <input type="text" name="search_query" class="filter-input " placeholder="Search Initiatives by ID, Employee Name or ID...">
+
+        <!-- Category Filter -->
+        <select name="category" class="filter-dropdown "> 
+            <option value="all">All Categories</option>
+            {% for category in dropdown_options.categories %}
+            <option value="{{ category }}">{{ category }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Division Filter -->
+        <!-- <select name="division" class="filter-dropdown" multiple>
+            <option value="all">All Divisions</option>
+            {% for division in dropdown_options.divisions %}
+            <option value="{{ division }}">{{ division }}</option>
+            {% endfor %}
+        </select>   -->
+    
+        <!-- Division Filter (Simple Checkbox Group) -->
+        <!-- ✅ Custom Checkbox Dropdown for Divisions -->
+        <!-- <div class="multipleSelection filter-dropdown" style="position: relative;" >
+            <div class="selectBox" onclick="toggleCheckboxDropdown()" class="filter-dropdown">
+                <div class="filter-dropdown" id="divisionDropdownToggle">Select Divisions ▾</div>
+            </div>
+
+            <div id="divisionCheckboxes" style="display: none;" class="checkbox-dropdown">
+                <label><input type="checkbox" name="division" value="all" /> All Divisions</label>
+                {% for division in dropdown_options.divisions %}
+                <label><input type="checkbox" name="division" value="{{ division }}" /> {{ division }}</label>
+                {% endfor %}
+            </div>
+        </div> -->
+        
+
+         <!-- ✅ Styled Division Dropdown Matching Other Selects -->
+        <!-- ✅ Styled Division Dropdown Matching Other Selects -->
+        <!-- ✅ Styled Division Dropdown Matching Other Selects -->
+        
+        <!-- <div class="filter-dropdown " style="position: relative;"> 
+            <div id="divisionDropdownToggle"  onclick="toggleCheckboxDropdown()">
+            Select Divisions
+            </div>
+        
+        
+            <div id="divisionCheckboxes" class="checkbox-dropdown ">
+            <label><input type="checkbox" name="division" value="all" /> All Divisions</label>
+            {% for division in dropdown_options.divisions %}
+            <label><input type="checkbox" name="division" value="{{ division }}" /> {{ division }}</label>
+            {% endfor %}
+            </div>
+        </div> -->
+    
+        <div class="filter-dropdown " style="position: relative;"> 
+            
+            <div  id="divisionDropdownToggle " class = 'styled-select'  onclick="toggleCheckboxDropdown()">
+            Select Divisions
+            </div>
+        
+        
+            <div id="divisionCheckboxes" class="checkbox-dropdown " >
+            <label><input type="checkbox" name="division" value="all" /> All Divisions</label>
+            {% for division in dropdown_options.divisions %}
+            <label><input type="checkbox" name="division" value="{{ division }}" /> {{ division }}</label>
+            {% endfor %}
+            </div>
+        </div>
+        
+
+        <!-- Status Filter -->
+        <select name="status" class="filter-dropdown">
+            <option value="all">Status</option>
+            {% for status in dropdown_options.statuses %}
+            <option value="{{ status }}">{{ status }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Year Filter -->
+        <select name="year" class="filter-dropdown">
+            <option value="all">Years</option>
+            {% for year in dropdown_options.years %}
+            <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Search Button -->
+        <button type="submit" class="button">Search</button>
+    </form>
+</div>
+
+<!-- External JavaScript -->
+<script src="{{ url_for('static', filename='scripts.js') }}"></script>
+
+{% endblock %}
+

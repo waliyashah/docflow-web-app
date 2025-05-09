@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Anchor at the top -->
+<div id="top"></div>
+
+<div class="container">
+  <h2 style="font-size: 1.5rem; color: #5A2A7D; font-weight: bold; margin-top: -49px; ">Showing Initiatives</h2>
+  
+    <!-- Add this where you want the button to appear -->
+  <!-- Add this where you want the download button to appear -->
+  <!-- Add this where you want the download button to appear -->
+<div class="pdf-download-section" style="text-align: center; margin: 20px 0;">
+  <button id="downloadPdfBtn" class="pdf-download-btn" 
+          style="background-color: #5A2A7D; color: white; 
+                 padding: 10px 20px; border: none; 
+                 border-radius: 5px; cursor: pointer;
+                 font-size: 16px; font-weight: bold;
+                 transition: background-color 0.3s;">
+    <i class="fas fa-file-pdf" style="margin-right: 8px;"></i>
+    Export to PDF
+  </button>
+  <span id="pdfLoading" style="display: none; margin-left: 10px;">
+    <i class="fas fa-spinner fa-spin" style="color: #5A2A7D;"></i>
+    Generating...
+  </span>
+</div>
+
+</div>
+
+
+
+
+{% if message %}
+  <p style="text-align: center; color: red; font-size: 1.5rem; font-weight: bold; margin-top: 20px;">{{ message }}</p>
+{% elif initiatives and initiatives|length > 0 %}
+
+<div id="pdfExportSection"></div>
+  <!-- DataTable with ID and Adjusted Position -->
+  <table id="initiativesTable" class="table-auto bg-white shadow rounded overflow-hidden">
+    <thead>
+      <tr >
+        <!-- <th>ID</th> -->
+        <th>IN_ID</th>
+        <th>Division_Name</th>
+        <th>Category</th>
+        <th>Employee ID</th>
+        <th>Employee Name</th>
+        <th>Employee Role</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Year</th>
+        <th>Participants</th>
+        <th>Actions</th>
+        <th>Reports</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for initiative in initiatives %}
+      <tr>
+        <!-- <td>{{ initiative['ID'] }}</td> -->
+        <td>{{ initiative['IN_ID'] }}</td>
+        <td >{{ initiative['Division_Name'] }}</td>
+        <td>{{ initiative['Category'] }}</td>
+        <td>{{ initiative['Employee_IDs'] }}</td>
+        <td>{{ initiative['Employee_Names'] }}</td>
+        <td>{{ initiative['Employee_Roles'] }}</td>
+        <td>{{ initiative['Title'] }}</td>
+        <td  >
+          {% set desc = initiative['Description'] %}
+          {% set max_length = 150 %}
+          {% if desc and desc|length > max_length %}
+            {% set short_text = desc[:max_length] %}
+            {% set remaining_text = desc[max_length:] %}
+            <span class="short-text">{{ short_text }}</span>
+            <span class="dots">...</span>
+            <span class="remaining-text"  style="display: none; ">
+              {{ remaining_text }}
+            </span>
+            <a href="javascript:void(0);" class="read-more-btn" >
+              Read More
+            </a>
+          {% else %}
+            {{ desc }}
+          {% endif %}
+        </td>
+        <td>{{ initiative['Status'] }}</td>
+        <td>{{ initiative['Year'] }}</td>
+        <td>{{ initiative['Participants'] }}</td>
+
+        <!-- Actions column, centered for aesthetics -->
+        <td class="text-center align-middle">
+          <!-- Edit & Delete (Row 1) -->
+          <div class="flex items-center justify-center gap-2 mb-1">
+            <!-- Edit -->
+            <a href="/update_initiative/{{ initiative['ID'] }}" class="edit-btn" title="Edit">
+              <i class="fas fa-pen-to-square text-purple-800 text-lg hover:text-purple-600"></i>
+            </a>
+        
+            <!-- Delete -->
+            <a href="javascript:void(0);" class="delete-btn " data-id="{{ initiative['IN_ID'] }}" title="Delete">
+              <i class="fas fa-trash text-red-600 text-lg hover:text-red-400"></i>
+            </a>
+
+            <!-- View History (Always visible) -->
+            <a href="/log/{{ initiative.IN_ID }}" title="View History"
+               class="text-blue-600 hover:text-blue-800 text-lg ">
+              <i class="fas fa-clock-rotate-left"></i>
+            </a>
+          </div>
+        
+          <!-- Approve/Reject & History (Row 2) -->
+          <div class="flex items-center justify-center gap-2">
+            {% if initiative['Status'] == 'Pending Approval' and user_is_approver %}
+              <!-- Approve -->
+              <!-- Approve -->
+              <button class="approve-btn bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-green-700"
+                data-id="{{ initiative['IN_ID'] }}" title="Approve">
+                <i class="fas fa-check text-sm"></i>
+              </button>
+
+              <!-- Reject -->
+              <button class="reject-btn bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-700"
+              data-id="{{ initiative['IN_ID'] }}" title="Reject">
+              <i class="fas fa-xmark text-sm"></i>
+              </button>
+            {% endif %}
+          </div>
+        </td>
+        
+        <!-- Within results.html, inside the loop that renders each initiative row -->
+        <td class="text-center">  <!-- Actions column, centered for aesthetics -->
+
+            <!-- Hidden numeric value for DataTables sorting -->
+          <span style="display: none;">{{ initiative.ReportCount or 0 }}</span>
+          {% if initiative.ReportCount and initiative.ReportCount > 0 %}
+            <!-- If there are reports, show active link button -->
+            <a href="{{ url_for('view_initiative_reports', in_id=initiative.IN_ID) }}" 
+              class="btn btn-primary btn-sm">
+              View Reports
+            </a>
+          {% else %}
+            <!-- If no reports, show disabled button with tooltip -->
+            <button class="btn btn-secondary btn-sm" disabled 
+                    data-toggle="tooltip" title="No reports available">
+              View Reports
+            </button>
+          {% endif %}
+        </td>
+      
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>  
+
+  
+{% else %}
+  <p style="text-align: center; color: red; font-size: 1.5rem; margin-top: 20px;">No matching initiatives found.</p>
+{% endif %}
+
+<!-- Floating Back to Top Button -->
+<a href="#top" class="back-to-top">↑</a>
+
+
+
+<!-- Bootstrap Modal for Deleting Initiative -->
+ <!-- Delete Confirmation Modal -->
+  
+{% if session.get('role') in [ 'Approver'] %} 
+<div id="deleteModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">Delete Initiative</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+              <p>Are you sure you want to delete this initiative?</p>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+          </div>
+      </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- Add html2pdf.js library -->
+<!-- Load the html2pdf library -->
+<!-- Load the html2pdf library -->
+<!-- JavaScript Solution -->
+<!-- JavaScript Solution -->
+
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const pdfButton = document.getElementById('downloadPdfBtn');
+  const loadingIndicator = document.getElementById('pdfLoading');
+
+  if (pdfButton) {
+    pdfButton.addEventListener('click', async function() {
+      // Show loading state
+      pdfButton.disabled = true;
+      loadingIndicator.style.display = 'inline-block';
+      
+      try {
+        // Get the table element
+        const originalTable = document.getElementById('initiativesTable');
+        if (!originalTable) throw new Error('Table not found');
+        
+        // Clone the table for PDF export
+        const tableClone = originalTable.cloneNode(true);
+
+        // Hide Actions and Reports columns (last two columns)
+        const rows = tableClone.querySelectorAll('tr');
+        rows.forEach(row => {
+          const cells = row.querySelectorAll('td, th');
+          if (cells.length > 0) {
+            // Remove last two cells (Actions and Reports)
+            if (cells.length >= 12) { // Assuming 12 columns based on your table
+              cells[cells.length - 1].remove(); // Reports
+              cells[cells.length - 2].remove(); // Actions
+            }
+          }
+        });
+        
+        // Expand all "Read More" descriptions
+        const descriptionCells = tableClone.querySelectorAll('td');
+        descriptionCells.forEach(cell => {
+          const shortText = cell.querySelector('.short-text');
+          const remainingText = cell.querySelector('.remaining-text');
+          
+          if (shortText && remainingText) {
+            // Combine full text and remove interactive elements
+            cell.innerHTML = shortText.textContent + remainingText.textContent;
+          }
+        });
+
+        // Create PDF container
+        const pdfContainer = document.createElement('div');
+        pdfContainer.style.padding = '20px';
+        ////////////////////////
+        pdfContainer.style.backgroundColor = 'white'; // Ensure white background
+        pdfContainer.style.color = 'black'; // Ensure black text
+        
+        // Add title
+        const title = document.createElement('h2');
+        title.textContent = 'Initiatives';
+        title.style.color = 'black';
+        title.style.textAlign = 'center';
+        title.style.marginBottom = '20px';
+        title.style.fontSize = '22pt'; // Increased from default (usually 16-18pt)
+        title.style.fontWeight = 'bold'; // Optional: adds emphasis
+        pdfContainer.appendChild(title);
+        
+        // Add date
+        const date = document.createElement('div');
+        date.textContent = 'Generated on: ' + new Date().toLocaleDateString();
+        date.style.textAlign = 'right';
+        date.style.marginBottom = '20px';
+        date.style.color = 'black'; // Ensure black text ///////////
+        pdfContainer.appendChild(date);
+
+        /////////////////////////////
+        // Style the table for PDF
+        tableClone.style.backgroundColor = 'white';
+        tableClone.style.color = 'black';
+        tableClone.style.width = '100%';
+
+        // Set specific column widths to prevent truncation
+        const headerCells = tableClone.querySelectorAll('th');
+        if (headerCells.length >= 10) { // For 10 columns after removing Actions/Reports
+          headerCells[1].style.width = '200px'; // IN_ID column wider
+          // headerCells[1].style.width = '80px'; // Division_Name
+          // headerCells[2].style.width = '80px'; // Category
+        }
+
+        // Style all table cells to ensure proper colors
+        const allCells = tableClone.querySelectorAll('td, th');
+        allCells.forEach(cell => {
+          cell.style.backgroundColor = 'white';
+          cell.style.color = 'black';
+          cell.style.border = '1px solid #ddd';
+        });
+        ///////////////////////////////////////
+        
+        // Add the modified table
+        pdfContainer.appendChild(tableClone);
+        
+        // PDF generation options
+        const options = {
+          margin: 15,
+          filename: 'initiatives_report_' + new Date().toISOString().slice(0, 10)+ '.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { 
+            scale: 1,
+            scrollY: 0,
+            useCORS: true,
+            width: 1684,
+            backgroundColor: 'white' // Ensure white background in canvas
+
+          },
+          jsPDF: { 
+            unit: 'mm',
+            format: 'a3',
+            orientation: 'landscape'
+          }
+        };
+        
+        // Generate and save PDF
+        await html2pdf().set(options).from(pdfContainer).save();
+        
+        // Briefly show downloaded state
+        pdfButton.innerHTML = '<i class="fas fa-check" style="margin-right: 8px;"></i> Downloaded!';
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+      } catch (error) {
+        console.error('PDF generation error:', error);
+        alert('Failed to generate PDF: ' + error.message);
+      } finally {
+        // Reset button state
+        pdfButton.disabled = false;
+        loadingIndicator.style.display = 'none';
+        pdfButton.innerHTML = '<i class="fas fa-file-pdf" style="margin-right: 8px;"></i> Export to PDF';
+      }
+    });
+  }
+});
+</script> 
+
+
+{% endblock %}

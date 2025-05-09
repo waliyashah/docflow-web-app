@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WG+E KRA</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Bootstrap CSS (Add this for modal support) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- linking External CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='form-styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='table-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='filters.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+     <!--  DataTables CSS (Added Here) -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+
+
+
+</head>
+    
+<body class="bg-[#EEE7F2] text-[#8071A2] min-h-screen flex flex-col">
+    
+    <input type="hidden" id="user-role" value="{{ session.get('role', '') }}">
+    <!-- Header & Navigation Bar -->
+    <header class="navbar navbar-expand-lg navbar-light">
+        <!-- Logo Section (Right-Aligned) -->
+        
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='Logos/WGE-WCF-logo-B-white.png') }}" alt="WG+E Logo" class="logo">
+            </div>
+
+            <div class="nav-center">
+                <span class="navbar-title">Initiative Management System</span>
+            </div>
+
+            <div class="nav-right">
+                <a href="/index">
+                    <i class="fa fa-home"></i>
+                </a>
+
+            {% if session.get('role') in ['Approver'] and pending_count > 0 %}
+            <a href="/search?category=all&division=all&status=Pending%20Approval&year=all">
+                <i class="fas fa-bell"></i>
+                <span style="position: absolute; top: 9px; right: 61px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 8px;">
+                    {{ pending_count }}
+                </span>
+            </a>
+            {% endif %}    
+
+            {% if session.get('user_id') %}
+                <a href="{{ url_for('auth.logout') }}">
+                <i class="fas fa-sign-out-alt"></i>
+                
+                </a>
+            {% endif %}
+
+            </div>
+        
+                   
+    </header>
+
+    <!-- Main Content Block -->
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        &copy; 2025 WG+E | All Rights Reserved
+    </footer>
+    
+    
+    <!-- DataTables Scripts -->
+    <!-- DataTables JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <!-- Bootstrap (Ensure Modal Works) -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- External JavaScript -->
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    
+
+</body>
+</html>
